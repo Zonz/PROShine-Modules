@@ -201,6 +201,12 @@ metatables =
 		__eq = function(left, right)
 			return left.x == right.x and left.y == right.y
 		end,
+		__tostring = function(self)
+			return "Cell (" .. self.x .. ", " .. self.y .. ") type: " .. self.type .. ", neighbours: " .. #self.neighbours
+		end,
+		__concat = function(left, right)
+			return tostring(left) .. tostring(right)
+		end,
 	},
 	
 	cells =
@@ -246,6 +252,12 @@ metatables =
 			self.__length = (map.width + 1) * (map.height + 1)
 			return self.__length
 		end,
+		__tostring = function(self)
+			return map.name .. " - " .. #self .. " cells"
+		end,
+		__concat = function(left, right)
+			return tostring(left) .. tostring(right)
+		end,
 	},
 	
 	map =
@@ -275,6 +287,12 @@ metatables =
 			local currentMap = getMapName()
 			cachedMaps[currentMap] = cachedMaps[currentMap] or setmetatable({}, self.__map_meta)
 			cachedMaps[currentMap][key] = value
+		end,
+		__tostring = function(self)
+			return map.name .. "\nWidth: " .. self.width .. "\nHeight: " .. self.height .. "\n" .. #self.links .. " links\n" .. #self.npcs .. " npcs"
+		end,
+		__concat = function(left, right)
+			return tostring(left) .. tostring(right)
 		end,
 	}
 }
