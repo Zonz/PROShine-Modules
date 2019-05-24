@@ -11,3 +11,5 @@ They use the following global variables:
 - moveToLine
 
 See the top of each file for instructions on how to use them.
+
+If you get an error "attempt to index a nil value" on loading a script, make sure you didn't put the example script in your Libs folder.
