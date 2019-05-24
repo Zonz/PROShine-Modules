@@ -25,7 +25,8 @@ Team member fields:
 	team[index].name			-	getPokemonName(index)
 	team[index].form			-	getPokemonForm(index)
 	team[index].uniqueId		-	getPokemonUniqueId(index)
-	team[index].shiny			-	isPokemonShiny(index)
+	team[index].isShiny			-	isPokemonShiny(index)
+	team[index].isSpecial		-	isPokemonShiny(index) or getPokemonForm(index) ~= 0
 	team[index].nature			-	getPokemonNature(index)
 	team[index].ability			-	getPokemonAbility(index)
 	team[index].region			-	getPokemonRegion(index)
@@ -44,7 +45,7 @@ Team member fields:
 	team[index].item			-	getPokemonHeldItem(index)
 	team[index].status			-	getPokemonStatus(index)
 	team[index].happiness		-	getPokemonHappiness(index)
-	team[index].usable			-	isPokemonUsable(index)
+	team[index].isUsable			-	isPokemonUsable(index)
 	team[index].stats			-	Stat data	-	example: team[index].stats.attack	-	getPokemonStat(index, "attack")
 	team[index].ivs				-	IV data		-	example: team[index].ivs.attack		-	getPokemonIndividualValue(index, "attack")
 	team[index].evs				-	EV data		-	example: team[index].evs.attack		-	getPokemonEffortValue(index, "attack")
@@ -61,7 +62,7 @@ Move fields:
 	team[index].moves[moveIndex].power		-	getPokemonMovePower(index, moveIndex)
 	team[index].moves[moveIndex].type		-	getPokemonMoveType(index, moveIndex)
 	team[index].moves[moveIndex].damageType	-	getPokemonMoveDamageType(index, moveIndex)
-	team[index].moves[moveIndex].status		-	getPokemonMoveStatus(index, moveIndex)
+	team[index].moves[moveIndex].isStatus	-	getPokemonMoveStatus(index, moveIndex)
 	You can also get a move by its name (not case sensitive):
 	team[index].moves["False Swipe"]
 
@@ -90,7 +91,7 @@ PC Pokemon fields:
 	pc[boxIndex][slotIndex].name			-	getPokemonNameFromPC(boxIndex, slotIndex)
 	pc[boxIndex][slotIndex].form			-	getPokemonFormFromPC(boxIndex, slotIndex)
 	pc[boxIndex][slotIndex].uniqueId		-	getPokemonUniqueIdFromPC(boxIndex, slotIndex)
-	pc[boxIndex][slotIndex].shiny			-	isPokemonFromPCShiny(boxIndex, slotIndex)
+	pc[boxIndex][slotIndex].isShiny			-	isPokemonFromPCShiny(boxIndex, slotIndex)
 	pc[boxIndex][slotIndex].nature			-	getPokemonNatureFromPC(boxIndex, slotIndex)
 	pc[boxIndex][slotIndex].ability			-	getPokemonAbilityFromPC(boxIndex, slotIndex)
 	pc[boxIndex][slotIndex].region			-	getPokemonRegionFromPC(boxIndex, slotIndex)
@@ -126,7 +127,7 @@ PC move fields:
 	pc[boxIndex][slotIndex].moves[moveIndex].power		-	getPokemonMovePowerFromPC(boxIndex, slotIndex, moveIndex)
 	pc[boxIndex][slotIndex].moves[moveIndex].type		-	getPokemonMoveTypeFromPC(boxIndex, slotIndex, moveIndex)
 	pc[boxIndex][slotIndex].moves[moveIndex].damageType	-	getPokemonMoveDamageTypeFromPC(boxIndex, slotIndex, moveIndex)
-	pc[boxIndex][slotIndex].moves[moveIndex].status		-	getPokemonMoveStatusFromPC(boxIndex, slotIndex, moveIndex)
+	pc[boxIndex][slotIndex].moves[moveIndex].isStatus	-	getPokemonMoveStatusFromPC(boxIndex, slotIndex, moveIndex)
 	You can also get a move by its name (not case sensitive):
 	pc[boxIndex][slotIndex].moves["False Swipe"]
 
@@ -142,7 +143,7 @@ PC status fields:
 	#pc					-	getPCBoxCount()
 	#pc[boxIndex]		-	getCurrentPCBoxSize()
 	pc.isOpen			-	isPCOpen()
-	pc.refreshed		-	isCurrentPCBoxRefreshed()
+	pc.isRefreshed		-	isCurrentPCBoxRefreshed()
 	pc.currentBoxId		-	getCurrentPCBoxId()
 	pc.currentBoxSize	-	getCurrentPCBoxSize()
 	pc.boxCount			-	getPCBoxCount()
@@ -156,25 +157,26 @@ PC functions:
 	pc.openPreviousBox()	-	openPCBox(getCurrentPCBoxId() - 1)
 
 Opponent fields:
-	opponent.shiny			-	isOpponentShiny()
-	opponent.alreadyCaught	-	isAlreadyCaught()
-	opponent.wild			-	isWildBattle()
-	opponent.isTrainer		-	not isWildBattle()
-	opponent.id				-	getOpponentId()
-	opponent.name			-	getOpponentName()
-	opponent.health			-	getOpponentHealth()
-	opponent.maxHealth		-	getOpponentMaxHealth()
-	opponent.healthPercent	-	getOpponentHealthPercent()
-	opponent.level			-	getOpponentLevel()
-	opponent.status			-	getOpponentStatus()
-	opponent.form			-	getOpponentForm()
-	opponent.types			-	getOpponentType()
-	opponent.type1			-	getOpponentType()[1]
-	opponent.type2			-	getOpponentType()[2]
+	opponent.isShiny			-	isOpponentShiny()
+	opponent.isSpecial			-	isOpponentShiny() or getOpponentForm() ~= 0
+	opponent.isAlreadyCaught	-	isAlreadyCaught()
+	opponent.isWild				-	isWildBattle()
+	opponent.isTrainer			-	not isWildBattle()
+	opponent.id					-	getOpponentId()
+	opponent.name				-	getOpponentName()
+	opponent.health				-	getOpponentHealth()
+	opponent.maxHealth			-	getOpponentMaxHealth()
+	opponent.healthPercent		-	getOpponentHealthPercent()
+	opponent.level				-	getOpponentLevel()
+	opponent.status				-	getOpponentStatus()
+	opponent.form				-	getOpponentForm()
+	opponent.types				-	getOpponentType()
+	opponent.type1				-	getOpponentType()[1]
+	opponent.type2				-	getOpponentType()[2]
+	opponent.evs				-	opponent ev data	-	example: opponent.evs.attack	-	getOpponentEffortValue("attack")
 
 Opponent functions:
 	opponent.isEffortValue(type)	-	isOpponentEffortValue(type)
-	opponent.effortValue(type)		-	getOpponentEffortValue(type)
 	opponent.hasType(type)			-	opponent.type1 == type or opponent.type2 == type
 
 
@@ -242,7 +244,7 @@ local Pokemon = {}
 -- This is used for HP types, thus no fairy type
 local types = {"Fighting", "Flying", "Poison", "Ground", "Rock", "Bug", "Ghost", "Steel", "Fire", "Water", "Grass", "Electric", "Psychic", "Ice", "Dragon", "Dark"}
 
--- Used for calculating HP type
+-- Used for stats, ivs, and evs
 local stats = {"Attack", "Defence", "Speed", "SpAttack", "SpDefence", "HP"}
 
 -- These hold references to Pokemon when creating them.
@@ -284,7 +286,7 @@ local callbacks =
 		name = getPokemonName,
 		form = getPokemonForm,
 		uniqueId = getPokemonUniqueId,
-		shiny = isPokemonShiny,
+		isShiny = isPokemonShiny,
 		nature = getPokemonNature,
 		ability = getPokemonAbility,
 		region = getPokemonRegion,
@@ -294,6 +296,9 @@ local callbacks =
 		
 		self =
 		{
+			isSpecial = function(self)
+				return self.isShiny or self.form ~= 0
+			end,
 			type1 = function(self)
 				return self.types[1]
 			end,
@@ -301,9 +306,10 @@ local callbacks =
 				return self.types[2]
 			end,
 			hpType = function(self)
-				local hpCalc = 0	
-				for i = 1, 6 do
-					hpCalc = hpCalc + (self.ivs[stats[i]] % 2) * (2 ^ (i - 1))
+				log("Calculating")
+				local hpCalc = 0
+				for i, iv in ipairs(self.ivs) do
+					hpCalc = hpCalc + (iv % 2) * (2 ^ (i - 1))
 				end	
 				return types[math.floor(hpCalc * 15 / 63) + 1]
 			end,
@@ -322,7 +328,7 @@ local callbacks =
 		item = getPokemonHeldItem,
 		status = getPokemonStatus,
 		happiness = getPokemonHappiness,
-		usable = isPokemonUsable,
+		isUsable = isPokemonUsable,
 	},
 	
 	moves =
@@ -334,7 +340,7 @@ local callbacks =
 			power = getPokemonMovePower,
 			type = getPokemonMoveType,
 			damageType = getPokemonMoveDamageType,
-			status = getPokemonMoveStatus,
+			isStatus = getPokemonMoveStatus,
 		},
 		-- getRemainingPowerPoints is the only dynamic, so it's handled with the metatable
 		
@@ -357,7 +363,7 @@ local callbacks =
 		name = getPokemonNameFromPC,
 		form = getPokemonFormFromPC,
 		uniqueId = getPokemonUniqueIdFromPC,
-		shiny = isPokemonFromPCShiny,
+		isShiny = isPokemonFromPCShiny,
 		nature = getPokemonNatureFromPC,
 		ability = getPokemonAbilityFromPC,
 		region = getPokemonRegionFromPC,
@@ -377,6 +383,9 @@ local callbacks =
 		
 		self =
 		{
+			isSpecial = function(self)
+				return self.isShiny or self.form ~= 0
+			end,
 			type1 = function(self)
 				return self.types[1]
 			end,
@@ -384,9 +393,9 @@ local callbacks =
 				return self.types[2]
 			end,
 			hpType = function(self)
-				local hpCalc = 0	
-				for i = 1, 6 do
-					hpCalc = hpCalc + (self.ivs[stats[i]] % 2) * (2 ^ (i - 1))
+				local hpCalc = 0
+				for i, iv in ipairs(self.ivs) do
+					hpCalc = hpCalc + (iv % 2) * (2 ^ (i - 1))
 				end	
 				return types[math.floor(hpCalc * 15 / 63) + 1]
 			end,
@@ -395,7 +404,7 @@ local callbacks =
 		status =
 		{
 			isOpen = isPCOpen,
-			refreshed = isCurrentPCBoxRefreshed,
+			isRefreshed = isCurrentPCBoxRefreshed,
 			currentBoxId = getCurrentPCBoxId,
 			currentBoxSize = getCurrentPCBoxSize,
 			boxCount = getPCBoxCount,
@@ -413,16 +422,16 @@ local callbacks =
 			power = getPokemonMovePowerFromPC,
 			type = getPokemonMoveTypeFromPC,
 			damageType = getPokemonMoveDamageTypeFromPC,
-			status = getPokemonMoveStatusFromPC,
+			isStatus = getPokemonMoveStatusFromPC,
 		},
 	},
 	
 	-- All battle callbacks are dynamic so we don't have to fuck around with re-caching data
 	battle =
 	{
-		shiny = isOpponentShiny,
-		alreadyCaught = isAlreadyCaught,
-		wild = isWildBattle,
+		isShiny = isOpponentShiny,
+		isAlreadyCaught = isAlreadyCaught,
+		isWild = isWildBattle,
 		id = getOpponentId,
 		name = getOpponentName,
 		health = getOpponentHealth,
@@ -435,6 +444,7 @@ local callbacks =
 		type1 = function() return getOpponentType()[1] end,
 		type2 = function() return getOpponentType()[2] end,
 		isTrainer = function() return not isWildBattle() end,
+		isSpecial = function() return isOpponentShiny() or getOpponentForm() ~= 0 end,
 	},
 }
 
@@ -444,7 +454,7 @@ local metatables =
 	{
 		__index = function(self, key)
 			if callbacks.static.self[key] then
-				local ret = callbacks.static[key](self)
+				local ret = callbacks.static.self[key](self)
 				rawset(self, key, ret)
 				return ret
 			elseif callbacks.static[key] then
@@ -475,12 +485,16 @@ local metatables =
 	{
 		__index = function(self, key)
 			if callbacks.moves.static[key] then
-				self[key] = callbacks.moves.static[key](self.ownerIndex, self.index)
-				return rawget(self, key)
+				local ret = callbacks.moves.static[key](self.ownerIndex, self.index)
+				rawset(self, key, ret)
+				return ret
 			elseif callbacks.moves.functions[key] then
 				return callbacks.moves.functions[key]
 			end
 			return key == "PP" and getRemainingPowerPoints(self.ownerIndex, self.name) or nil
+		end,
+		__newindex = function(self, key, value)
+			error("Pokemon move data is read only. (Tried to set " .. tostring(key) .. " to " .. tostring(value) .. ")")
 		end,
 		__tostring = function(self)
 			return self.name .. " (" .. self.PP .. "/" .. self.maxPP .. " PP)"
@@ -495,15 +509,14 @@ local metatables =
 		__index = function(self, key)
 			if type(key) == "string" then -- Allow for indexing by the move's name, eg Pokemon[1].moves["False Swipe"]
 				key = key:lower()
-				for i = 1, 4 do
-					local moveName = getPokemonMoveName(self.index, i)
-					if moveName and moveName:lower() == key then
-						return self[i]
+				for move in pairs(self) do
+					if move.name:lower() == key then
+						return move
 					end
 				end
 				return nil
 			end
-			if key > 4 then
+			if key < 1 or key > 4 then
 				return nil
 			end
 			local moveName = getPokemonMoveName(self.index, key)
@@ -513,10 +526,13 @@ local metatables =
 				ownerIndex = self.index,
 				index = key,
 				}, self.__move_meta)
-				self[key] = move
+				rawset(self, key, move)
 				return move
 			end
 			return nil
+		end,
+		__newindex = function(self, key, value)
+			error("Pokemon moves data is read only. (Tried to set " .. tostring(key) .. " to " .. tostring(value) .. ")")
 		end,
 		__len = function(self)			
 			local moveCount = 0
@@ -551,11 +567,11 @@ local metatables =
 			end
 		end,
 		__tostring = function(self)
-			local ret = getPokemonName(self.index) .. "'s moves:\n"
+			local ret = getPokemonName(self.index) .. "'s moves:"
 			for move in pairs(self) do
-				ret = ret .. move .. "\n"
+				ret = ret .. "\n" .. move
 			end
-			return ret:sub(1, -2)
+			return ret
 		end,
 		__concat = function(left, right)
 			return tostring(left) .. tostring(right)
@@ -570,12 +586,34 @@ local metatables =
 		__newindex = function(self, key, value)
 			error("Stat data is read only. (Tried to set " .. tostring(key) .. " to " .. tostring(value) .. ")")
 		end,
-		__tostring = function(self)
-			local ret = getPokemonName(self.index) .. "'s stats:\n"
-			for _, stat in ipairs(stats) do
-				ret = ret .. stat .. ": " .. getPokemonStat(self.index, stat) .. "\n"
+		__pairs = function(self)
+			local index = 1
+			return function()
+				if stats[index] == nil then
+					return nil
+				end
+				local statName, value = stats[index], self[stats[index]]
+				index = index + 1
+				return statName, value
 			end
-			return ret:sub(1, -2)
+		end,
+		__ipairs = function(self)
+			local index = 1
+			return function()
+				if stats[index] == nil then
+					return nil
+				end
+				local previous, value = index, self[stats[index]]
+				index = index + 1
+				return previous, value
+			end
+		end,
+		__tostring = function(self)
+			local ret = getPokemonName(self.index) .. "'s stats:"
+			for stat, value in pairs(self) do
+				ret = ret .. "\n" .. stat .. ": " .. value
+			end
+			return ret
 		end,
 		__concat = function(left, right)
 			return tostring(left) .. tostring(right)
@@ -590,12 +628,34 @@ local metatables =
 		__newindex = function(self, key, value)
 			error("IV data is read only. (Tried to set " .. tostring(key) .. " to " .. tostring(value) .. ")")
 		end,
-		__tostring = function(self)
-			local ret = getPokemonName(self.index) .. "'s ivs:\n"
-			for _, stat in ipairs(stats) do
-				ret = ret .. stat .. ": " .. getPokemonIndividualValue(self.index, stat) .. "\n"
+		__pairs = function(self)
+			local index = 1
+			return function()
+				if stats[index] == nil then
+					return nil
+				end
+				local statName, value = stats[index], self[stats[index]]
+				index = index + 1
+				return statName, value
 			end
-			return ret:sub(1, -2)
+		end,
+		__ipairs = function(self)
+			local index = 1
+			return function()
+				if stats[index] == nil then
+					return nil
+				end
+				local previous, value = index, self[stats[index]]
+				index = index + 1
+				return previous, value
+			end
+		end,
+		__tostring = function(self)
+			local ret = getPokemonName(self.index) .. "'s ivs:"
+			for stat, iv in pairs(self) do
+				ret = ret .. "\n" .. stat .. ": " .. iv
+			end
+			return ret
 		end,
 		__concat = function(left, right)
 			return tostring(left) .. tostring(right)
@@ -610,12 +670,41 @@ local metatables =
 		__newindex = function(self, key, value)
 			error("EV data is read only. (Tried to set " .. tostring(key) .. " to " .. tostring(value) .. ")")
 		end,
-		__tostring = function(self)
-			local ret = getPokemonName(self.index) .. "'s evs:\n"
-			for _, stat in ipairs(stats) do
-				ret = ret .. stat .. ": " .. getPokemonEffortValue(self.index, stat) .. "\n"
+		__pairs = function(self)
+			local index = 1
+			return function()
+				if stats[index] == nil then
+					return nil
+				end
+				local statName, value = stats[index], self[stats[index]]
+				index = index + 1
+				return statName, value
 			end
-			return ret:sub(1, -2)
+		end,
+		__ipairs = function(self)
+			local index = 1
+			return function()
+				if stats[index] == nil then
+					return nil
+				end
+				local previous, value = index, self[stats[index]]
+				index = index + 1
+				return previous, value
+			end
+		end,
+		__tostring = function(self)
+			local ret = getPokemonName(self.index) .. "'s evs:"
+			local total = 0
+			for stat, ev in pairs(self) do
+				if ev > 0 then
+					ret = ret .. "\n" .. stat .. ": " .. ev
+					total = total + ev
+				end
+			end
+			if total == 0 then
+				return ret .. " None"
+			end
+			return ret .. "\nTotal: " .. total
 		end,
 		__concat = function(left, right)
 			return tostring(left) .. tostring(right)
@@ -627,16 +716,19 @@ local metatables =
 		__index = function(self, key)
 			if type(key) == "string" then -- Allow for indexing by the Pokemon's name, eg Pokemon.PC[boxIndex]["Charmander"]
 				key = key:lower()
-				for i = 1, getCurrentPCBoxSize() do
-					if getPokemonNameFromPC(self.index, i):lower() == key then
-						return self[i]
+				for pokemon in pairs(self) do
+					if pokemon.name:lower() == key then
+						return pokemon
 					end
 				end
 				return nil
 			end
 			local poke = Pokemon.newFromPC(self.index, key)
-			self[key] = poke
+			rawset(self, key, poke)
 			return poke
+		end,
+		__newindex = function(self, key, value)
+			error("PC box data is read only. (Tried to set " .. tostring(key) .. " to " .. tostring(value) .. ")")
 		end,
 		__len = function(self)
 			return getCurrentPCBoxSize()
@@ -666,11 +758,11 @@ local metatables =
 			end
 		end,
 		__tostring = function(self)
-			local ret = "PC box " .. self.currentBoxId .. ":\n"
-			for pokemon in pairs(self) do
-				ret = ret .. "Slot " .. pokemon.index .. ": " .. pokemon .. "\n"
+			local ret = "PC box " .. self.index .. ":"
+			for i, pokemon in ipairs(self) do
+				ret = ret .. "\n" .. "Slot " .. i .. ": " .. pokemon
 			end
-			return ret:sub(1, -2)
+			return ret
 		end,
 		__concat = function(left, right)
 			return tostring(left) .. tostring(right)
@@ -738,10 +830,14 @@ local metatables =
 	{
 		__index = function(self, key)
 			if callbacks.PC.moves[key] then
-				self[key] = callbacks.PC.moves[key](self.ownerBox, self.ownerIndex, self.index)
-				return rawget(self, key)
+				local ret = callbacks.PC.moves[key](self.ownerBox, self.ownerIndex, self.index)
+				rawset(self, key, ret)
+				return ret
 			end
 			return nil
+		end,
+		__newindex = function(self, key, value)
+			error("PC move data is read only. (Tried to set " .. tostring(key) .. " to " .. tostring(value) .. ")")
 		end,
 		__tostring = function(self)
 			return self.name .. " (" .. self.PP .. "/" .. self.maxPP .. " PP)"
@@ -756,12 +852,14 @@ local metatables =
 		__index = function(self, key)
 			if type(key) == "string" then -- Allow for indexing by the move's name, eg Pokemon.PC[1][1].moves["False Swipe"]
 				key = key:lower()
-				for i = 1, 4 do
-					local moveName = getPokemonMoveNameFromPC(self.pcbox, self.index, i)
-					if moveName and moveName:lower() == key then
-						return self[i]
+				for move in pairs(self) do
+					if move.name:lower() == key then
+						return move
 					end
 				end
+				return nil
+			end
+			if key < 1 or key > 4 then
 				return nil
 			end
 			local moveName = getPokemonMoveNameFromPC(self.pcbox, self.index, key)
@@ -772,10 +870,13 @@ local metatables =
 				ownerIndex = self.index,
 				index = key,
 				}, self.__move_meta)
-				self[key] = move
+				rawset(self, key, move)
 				return move
 			end
 			return nil
+		end,
+		__newindex = function(self, key, value)
+			error("PC moves data is read only. (Tried to set " .. tostring(key) .. " to " .. tostring(value) .. ")")
 		end,
 		__len = function(self)			
 			local moveCount = 0
@@ -789,10 +890,10 @@ local metatables =
 		__pairs = function(self)
 			local index = 1
 			return function()
-				if index > 4 or getPokemonMoveNameFromPC(self.pcbox, self.index, index) == nil then
+				local move = self[index]
+				if move == nil then
 					return nil
 				end
-				local move = self[index]
 				index = index + 1
 				return move, move
 			end
@@ -800,20 +901,21 @@ local metatables =
 		__ipairs = function(self)
 			local index = 1
 			return function()
-				if index > 4 or getPokemonMoveNameFromPC(self.pcbox, self.index, index) == nil then
+				local move = self[index]
+				if move == nil then
 					return nil
 				end
-				local previous, move = index, self[index]
+				local previous = index
 				index = index + 1
 				return previous, move
 			end
 		end,
 		__tostring = function(self)
-			local ret = getPokemonNameFromPC(self.pcbox, self.index) .. "'s moves:\n"
+			local ret = getPokemonNameFromPC(self.pcbox, self.index) .. "'s moves:"
 			for move in pairs(self) do
-				ret = ret .. move .. "\n"
+				ret = ret .. "\n" .. move
 			end
-			return ret:sub(1, -2)
+			return ret
 		end,
 		__concat = function(left, right)
 			return tostring(left) .. tostring(right)
@@ -829,12 +931,34 @@ local metatables =
 		__newindex = function(self, key, value)
 			error("PC Stat data is read only. (Tried to set " .. tostring(key) .. " to " .. tostring(value) .. ")")
 		end,
-		__tostring = function(self)
-			local ret = getPokemonNameFromPC(self.pcbox, self.index) .. "'s stats:\n"
-			for _, stat in ipairs(stats) do
-				ret = ret .. stat .. ": " .. getPokemonStatFromPC(self.pcbox, self.index, stat) .. "\n"
+		__pairs = function(self)
+			local index = 1
+			return function()
+				if stats[index] == nil then
+					return nil
+				end
+				local statName, value = stats[index], self[stats[index]]
+				index = index + 1
+				return statName, value
 			end
-			return ret:sub(1, -2)
+		end,
+		__ipairs = function(self)
+			local index = 1
+			return function()
+				if stats[index] == nil then
+					return nil
+				end
+				local previous, value = index, self[stats[index]]
+				index = index + 1
+				return previous, value
+			end
+		end,
+		__tostring = function(self)
+			local ret = getPokemonNameFromPC(self.pcbox, self.index) .. "'s stats:"
+			for stat, value in pairs(self) do
+				ret = ret .. "\n" .. stat .. ": " .. value
+			end
+			return ret
 		end,
 		__concat = function(left, right)
 			return tostring(left) .. tostring(right)
@@ -850,12 +974,34 @@ local metatables =
 		__newindex = function(self, key, value)
 			error("PC IV data is read only. (Tried to set " .. tostring(key) .. " to " .. tostring(value) .. ")")
 		end,
-		__tostring = function(self)
-			local ret = getPokemonNameFromPC(self.pcbox, self.index) .. "'s ivs:\n"
-			for _, stat in ipairs(stats) do
-				ret = ret .. stat .. ": " .. getPokemonIndividualValueFromPC(self.pcbox, self.index, stat) .. "\n"
+		__pairs = function(self)
+			local index = 1
+			return function()
+				if stats[index] == nil then
+					return nil
+				end
+				local statName, value = stats[index], self[stats[index]]
+				index = index + 1
+				return statName, value
 			end
-			return ret:sub(1, -2)
+		end,
+		__ipairs = function(self)
+			local index = 1
+			return function()
+				if stats[index] == nil then
+					return nil
+				end
+				local previous, value = index, self[stats[index]]
+				index = index + 1
+				return previous, value
+			end
+		end,
+		__tostring = function(self)
+			local ret = getPokemonNameFromPC(self.pcbox, self.index) .. "'s ivs:"
+			for stat, iv in pairs(self) do
+				ret = ret .. "\n" .. stat .. ": " .. iv
+			end
+			return ret
 		end,
 		__concat = function(left, right)
 			return tostring(left) .. tostring(right)
@@ -871,12 +1017,41 @@ local metatables =
 		__newindex = function(self, key, value)
 			error("PC EV data is read only. (Tried to set " .. tostring(key) .. " to " .. tostring(value) .. ")")
 		end,
-		__tostring = function(self)
-			local ret = getPokemonNameFromPC(self.pcbox, self.index) .. "'s evs:\n"
-			for _, stat in ipairs(stats) do
-				ret = ret .. stat .. ": " .. getPokemonEffortValueFromPC(self.pcbox, self.index, stat) .. "\n"
+		__pairs = function(self)
+			local index = 1
+			return function()
+				if stats[index] == nil then
+					return nil
+				end
+				local statName, value = stats[index], self[stats[index]]
+				index = index + 1
+				return statName, value
 			end
-			return ret:sub(1, -2)
+		end,
+		__ipairs = function(self)
+			local index = 1
+			return function()
+				if stats[index] == nil then
+					return nil
+				end
+				local previous, value = index, self[stats[index]]
+				index = index + 1
+				return previous, value
+			end
+		end,
+		__tostring = function(self)
+			local ret = getPokemonNameFromPC(self.pcbox, self.index) .. "'s evs:"
+			local total = 0
+			for stat, ev in pairs(self) do
+				if ev > 0 then
+					ret = ret .. "\n" .. stat .. ": " .. ev
+					total = total + ev
+				end
+			end
+			if total == 0 then
+				return ret .. " None"
+			end
+			return ret .. "\nTotal: " .. total
 		end,
 		__concat = function(left, right)
 			return tostring(left) .. tostring(right)
@@ -896,6 +1071,50 @@ local metatables =
 		end,
 		__tostring = function(self)
 			return self.name .. " level " .. self.level .. " (" .. self.health .. "/" .. self.maxHealth .. " HP - Status: " .. self.status .. ")"
+		end,
+		__concat = function(left, right)
+			return tostring(left) .. tostring(right)
+		end,
+	},
+	
+	opponent_evs =
+	{
+		__index = function(self, key)
+			return getOpponentEffortValue(key)
+		end,
+		__newindex = function(self, key, value)
+			error("Opponent ev data is read only. (Tried to set " .. tostring(key) .. " to " .. tostring(value) .. ")")
+		end,
+		__pairs = function(self)
+			local index = 1
+			return function()
+				if stats[index] == nil then
+					return nil
+				end
+				local statName, value = stats[index], self[stats[index]]
+				index = index + 1
+				return statName, value
+			end
+		end,
+		__ipairs = function(self)
+			local index = 1
+			return function()
+				if stats[index] == nil then
+					return nil
+				end
+				local previous, value = index, self[stats[index]]
+				index = index + 1
+				return previous, value
+			end
+		end,
+		__tostring = function(self)
+			local ret = "Opponent evs:"
+			for stat, ev in pairs(self) do
+				if ev > 0 then
+					ret = ret .. "\n" .. stat .. ": " .. ev
+				end
+			end
+			return ret
 		end,
 		__concat = function(left, right)
 			return tostring(left) .. tostring(right)
@@ -1044,7 +1263,7 @@ end
 
 setmetatable(Pokemon.PC, metatables.PC)
 
-Pokemon.opponent = {}
+Pokemon.opponent = {evs = setmetatable({}, metatables.opponent_evs)}
 
 function Pokemon.opponent.isEffortValue(ev)
 	return isOpponentEffortValue(ev)
@@ -1122,8 +1341,9 @@ end
 function Pokemon:hasMove(moveName)
 	if self.pcbox then
 		-- hasMoveInPC does not exist
-		for i = 1, #self.moves do
-			if moveName:lower() == self.moves[i].name:lower() then
+		moveName = moveName:lower()
+		for move in pairs(self) do
+			if move.name:lower() == moveName then
 				return true
 			end
 		end
