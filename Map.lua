@@ -24,7 +24,7 @@ Cell fields:
 	cell.x				-	Cell x coordinate
 	cell.y				-	Cell y coordinate
 	cell.type			-	getCellType(cell.x, cell.y)
-	cell.walkable		-	Whether or not the cell can be walked (or surfed) on
+	cell.isWalkable		-	Whether or not the cell can be walked (or surfed) on
 	cell.neighbours		-	Directly adjacent cells that are walkable
 
 Cell functions:
@@ -80,7 +80,7 @@ local function newCell(x, y)
 	cell.x = x
 	cell.y = y
 	cell.type = getCellType(x, y)
-	cell.walkable = walkableTypes[cell.type] or false
+	cell.isWalkable = walkableTypes[cell.type] or false
 	cell.neighbours = {}	
 	setmetatable(cell, metatables.cell)
 	return cell
@@ -108,49 +108,49 @@ local function setNeighbours(cell, cellMap)
 	
 	if x > 0 then
 		left = cellMap[x - 1][y]
-		if left.walkable then
+		if left.isWalkable then
 			table.insert(cell.neighbours, left)
 		end
 	end
 	
 	if x < map.width then
 		right = cellMap[x + 1][y]
-		if right.walkable then
+		if right.isWalkable then
 			table.insert(cell.neighbours, right)
 		end
 	end
 	
 	if y > 0 then
 		top = cellMap[x][y - 1]
-		if top.walkable then
+		if top.isWalkable then
 			table.insert(cell.neighbours, top)
 		end
 	end
 	
 	if y < map.height then
 		bottom = cellMap[x][y + 1]
-		if bottom.walkable then
+		if bottom.isWalkable then
 			table.insert(cell.neighbours, bottom)
 		end
 	end
 	
 	if x > 1 and left.type == "Ledge West" then
 		left = cellMap[x - 2][y]
-		if left.walkable and left.type ~= "Water" then
+		if left.isWalkable and left.type ~= "Water" then
 			table.insert(cell.neighbours, left)
 		end
 	end
 	
 	if x < map.width - 1 and right.type == "Ledge East" then
 		right = cellMap[x + 2][y]
-		if right.walkable and right.type ~= "Water" then
+		if right.isWalkable and right.type ~= "Water" then
 			table.insert(cell.neighbours, right)
 		end
 	end
 	
 	if y < map.height - 1 and bottom.type == "Ledge South" then	
 		bottom = cellMap[x][y + 2]
-		if bottom.walkable and bottom.type ~= "Water" then
+		if bottom.isWalkable and bottom.type ~= "Water" then
 			table.insert(cell.neighbours, bottom)
 		end
 	end
