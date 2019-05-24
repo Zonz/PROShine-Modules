@@ -7,10 +7,10 @@ Player fields:
 	player.y				-	getPlayerY()
 	player.name				-	getAccountName()
 	player.money			-	getMoney()
-	player.member			-	isAccountMember()
-	player.mounted			-	isMounted()
-	player.surfing			-	isSurfing()
-	player.outside			-	isOutside()
+	player.isMember			-	isAccountMember()
+	player.isMounted		-	isMounted()
+	player.isSurfing		-	isSurfing()
+	player.isOutside		-	isOutside()
 	player.pokedexOwned		-	getPokedexOwned()
 	player.pokedexSeen		-	getPokedexSeen()
 	player.pokedexEvolved	-	getPokedexEvolved()
@@ -27,10 +27,10 @@ local callbacks =
 	y = getPlayerY,
 	name = getAccountName,
 	money = getMoney,
-	member = isAccountMember,
-	mounted = isMounted,
-	surfing = isSurfing,
-	outside = isOutside,
+	isMember = isAccountMember,
+	isMounted = isMounted,
+	isSurfing = isSurfing,
+	isOutside = isOutside,
 	pokedexOwned = getPokedexOwned,
 	pokedexSeen = getPokedexSeen,
 	pokedexEvolved = getPokedexEvolved,
