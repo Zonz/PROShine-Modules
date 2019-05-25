@@ -306,7 +306,6 @@ local callbacks =
 				return self.types[2]
 			end,
 			hpType = function(self)
-				log("Calculating")
 				local hpCalc = 0
 				for i, iv in ipairs(self.ivs) do
 					hpCalc = hpCalc + (iv % 2) * (2 ^ (i - 1))
