@@ -44,6 +44,18 @@ function table:clear()
 	end
 end
 
+function table:copy()
+	local copy = {}
+	for key, value in pairs(self) do
+		if type(value) == "table" then
+			copy[key] = table.copy(value)
+		else
+			copy[key] = value
+		end
+	end
+	return setmetatable(copy, getmetatable(self))
+end
+
 local _lineswitch
 function moveToLine(x1, y1, x2, y2)
 
