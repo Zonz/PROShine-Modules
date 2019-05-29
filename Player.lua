@@ -18,6 +18,7 @@ Player fields:
 Player functions:
 	player.isOnCell(x, y)					-	Equivalent to player.x == x and player.y == y
 	player.isInRectangle(x1, y1, x2, y2)	-	player.x >= x1 and player.y >= y1 and player.x <= x2 and player.y <= y2
+	player.mount(item)						-	Attempts to use a mount and returns true if successful
 
 ]]
 
@@ -43,7 +44,14 @@ function player.isOnCell(x, y)
 end
 
 function player.isInRectangle(x1, y1, x2, y2)
+	if type(x1) == "table" then
+		return getPlayerX() >= x1[1] and getPlayerY() >= x1[2] and getPlayerX() <= x1[3] and getPlayerY() <= x1[4]
+	end
 	return getPlayerX() >= x1 and getPlayerY() >= y1 and getPlayerX() <= x2 and getPlayerY() <= y2
+end
+
+function player.mount(item)
+	return player.isOutside and not player.isMounted and not player.isSurfing and hasItem(item) and useItem(item)
 end
 
 setmetatable(player, {
