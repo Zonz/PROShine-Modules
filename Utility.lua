@@ -56,6 +56,19 @@ function table:copy()
 	return setmetatable(copy, getmetatable(self))
 end
 
+function table:set()
+	local new = {}
+	for _, value in ipairs(self) do
+		new[value] = true
+	end
+	return new
+end
+
+function math.round(num, numDecimalPlaces)
+	local mult = 10 ^ (numDecimalPlaces or 0)
+	return math.floor(num * mult + 0.5) / mult
+end
+
 local _lineswitch
 function moveToLine(x1, y1, x2, y2)
 
