@@ -9,5 +9,6 @@ They use the following global variables:
 - player
 - map
 - moveToLine
+- timer
 
 See the top of each file for instructions on how to use them.
